@@ -15,7 +15,7 @@ class CalendarsController < ApplicationController
   private
 
   def plan_params
-    params.require(:calendars).permit(:date, :plan)
+    params.require(:plan).permit(:date, :plan)
   end
 
   def get_week
@@ -34,7 +34,11 @@ class CalendarsController < ApplicationController
       plans.each do |plan|
         today_plans.push(plan.plan) if plan.date == @todays_date + x
       end
-      days = {month: (@todays_date + x).month, date: (@todays_date+x).day, plans: today_plans}
+
+      # 表示する日付を計算する
+      calculated_day = @todays_date + x
+
+      days = { month: calculated_day.month, date: calculated_day.day, plans: today_plans , wdays: wdays[calculated_day.wday]}
       @week_days.push(days)
     end
 
